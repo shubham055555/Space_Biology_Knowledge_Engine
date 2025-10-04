@@ -155,8 +155,10 @@ def search_experiments(df, query, top_n=10, assay_filter=None, organism_filter=N
 
 # --- PAGE RENDERING FUNCTIONS ---
 
-def render_home(df):
-    """Renders the main search interface and sidebar filters."""
+def render_home(df_placeholder):
+    """Renders the main search interface and sidebar filters. 
+    It also handles the actual data loading based on sidebar input."""
+    
     # ------------------ Hero Section (Centerpiece Title and Search) ------------------
     st.markdown("<div class='hero-title'><span class='gradient-text'>Centralized Space</span><br><span class='purple-gradient'>Biology Knowledge Engine</span></div>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center; color: #a0a8b4; font-size: 1.1rem; margin-bottom: 50px;'>AI-powered semantic search for space biology research</p>", unsafe_allow_html=True)
@@ -165,12 +167,13 @@ def render_home(df):
     query = ""
     assay_filter = None
     organism_filter = None
-    file_path = "" # Define here for scope
+    
+    # Define current_df here for initial scope
+    current_df = df_placeholder 
 
     with st.sidebar:
         st.header("🔬 Filters and Configuration")
         default_path = "data/OSD-101_clean.csv"    # ✅ Relative path
-        # Using a key to avoid collision with main app logic if it was run outside
         file_path = st.text_input(
             "Enter CSV file path:",
             default_path,
@@ -178,12 +181,13 @@ def render_home(df):
             key="sidebar_filepath"
         )
         
-        # Reload the DF based on the path provided in the sidebar
+        # Load the DF based on the path provided in the sidebar
         current_df = load_metadata(file_path)
 
+        # CORRECTED INDENTATION FOR THE IF/ELSE BLOCK
         if current_df.empty:
             st.warning("Please check the file path. Could not load data.")
-            # If data cannot be loaded, the rest of the sidebar logic is skipped, and query remains empty.
+            # query remains ""
         else:
             st.markdown("---")
             st.subheader("Refine Search Results")
@@ -526,10 +530,6 @@ def main_app():
     tab_titles = ["Home", "Features", "Data Explorer", "About", "Contact"]
     home_tab, features_tab, data_explorer_tab, about_tab, contact_tab = st.tabs(tab_titles)
 
-    # Note: Data loading and sidebar filtering logic is now handled INSIDE render_home
-    # for a cleaner structure where filters update the main view data logic.
-    # The initial load is effectively done inside render_home now.
-    
     # We pass a dummy/default DataFrame, but render_home will handle the *actual*
     # load based on the sidebar path.
     default_df = pd.DataFrame() # An empty df for initial setup outside render_home's scope
@@ -547,3 +547,11 @@ def main_app():
         render_data_explorer()
 
     with about_tab:
+        # Indentation fix applied here
+        render_about() 
+
+    with contact_tab:
+        render_contact()
+
+if __name__ == "__main__":
+    main_app()
