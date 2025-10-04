@@ -82,15 +82,15 @@ def render_home(df):
     st.markdown("<p style='text-align: center; color: #a0a8b4; font-size: 1.1rem; margin-bottom: 50px;'>AI-powered semantic search for space biology research</p>", unsafe_allow_html=True)
 
     # --- Sidebar Filters ---
-    with st.sidebar:
-        st.header("🔬 Filters and Configuration")
-        default_path = "C:/Users/Krishna/Downloads/OSD-101_metadata_OSD-101-ISA/OSD-101_clean.csv"
-        file_path = st.text_input(
-            "Enter CSV file path:", 
-            default_path,
-            help="The CSV must contain 'Summary', 'Assay Name', and 'Organism' columns."
-        )
-        df = load_metadata(file_path)
+with st.sidebar:
+    st.header("🔬 Filters and Configuration")
+    default_path = "data/OSD-101_clean.csv"   # ✅ Relative path
+    file_path = st.text_input(
+        "Enter CSV file path:", 
+        default_path,
+        help="The CSV must contain 'Summary', 'Assay Name', and 'Organism' columns."
+    )
+    df = load_metadata(file_path)
         
         if df.empty:
             st.warning("Please check the file path. Could not load data.")
@@ -514,8 +514,9 @@ def main_app():
     home_tab, features_tab, data_explorer_tab, about_tab, contact_tab = st.tabs(tab_titles)
 
     # --- Load Data (Only loads once due to @st.cache_data) ---
-    default_path = "C:/Users/Krishna/Downloads/OSD-101_metadata_OSD-101-ISA/OSD-101_clean.csv"
-    df = load_metadata(default_path)
+default_path = "data/OSD-101_clean.csv"   # ✅ Relative path
+df = load_metadata(default_path)
+
     
     # --- Render content based on active tab ---
     
@@ -535,4 +536,5 @@ def main_app():
         render_contact()
 
 if __name__ == "__main__":
+
     main_app()
