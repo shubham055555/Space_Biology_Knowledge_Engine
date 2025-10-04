@@ -1,0 +1,13 @@
+pandas
+numpy
+tqdm
+transformers
+sentence-transformers
+torch
+faiss-cpu
+scikit-learn
+streamlit
+ipywidgets
+matplotlib
+networkx
+joblib
